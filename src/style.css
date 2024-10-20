@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  @apply w-1.5 bg-zinc-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply h-4 w-4 rounded-full bg-zinc-700;
+}
+
+@layer base {
+  input {
+    @apply w-full rounded-md border border-zinc-600 bg-transparent px-2 py-1.5 text-sm text-zinc-300 focus:outline-none;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-optical-sizing: auto;
+    @apply bg-zinc-900;
+  }
+}
