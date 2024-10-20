@@ -4,6 +4,7 @@
   import { appModals } from '@/stores/app.modals'
   import * as yup from 'yup'
   import { useForm } from 'vee-validate'
+  import { createId } from '@paralleldrive/cuid2'
 
   const emit = defineEmits(['submit'])
 
@@ -27,10 +28,16 @@
   const [startDate, startDateAttrs] = defineField('startDate')
   const [dueDate, dueDateAttrs] = defineField('dueDate')
   const [description, descriptionAttrs] = defineField('description')
-  const [tags, tagsAttrs] = defineField('tags')
 
   const onSubmit = handleSubmit(values => {
-    emit('submit', values)
+    emit('submit', {
+      id: createId(),
+      title: values.title,
+      startDate: values.startDate,
+      dueDate: values.dueDate,
+      description: values.description,
+      completed: false,
+    })
     onHiddenModal()
   })
 
@@ -68,10 +75,10 @@
             <h1 class="text-zinc-100 font-semibold text-lg flex-1 truncate">New Task</h1>
 
             <button
-              class="shrink-0 border border-zinc-700 p-1 leading-none text-zinc-500 transition hover:bg-zinc-700 hover:text-zinc-300"
+              class="shrink-0 border border-zinc-700 p-1 leading-none text-zinc-500 transition hover:bg-zinc-700 hover:text-zinc-300 rounded-md"
               @click="onHiddenModal"
             >
-              <X size="20" />
+              <X :size="20" />
             </button>
           </div>
 
@@ -137,7 +144,7 @@
                 :disabled="isSubmitting"
                 type="submit"
               >
-                <Loader class="animate-spin" v-show="isSubmitting" size="20" />
+                <Loader class="animate-spin" v-show="isSubmitting" :size="20" />
                 Registrar Tarefa
               </button>
             </div>

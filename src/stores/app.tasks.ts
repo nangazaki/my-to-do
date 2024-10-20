@@ -8,13 +8,13 @@ export interface IColumn {
 }
 
 export interface ITask {
-  id: string
-  title: string
+  id?: string
+  title?: string
   cover?: string
-  startDate: string | null
-  dueDate: string | null
-  description: string
-  completed: boolean
+  startDate?: string | null
+  dueDate?: string | null
+  description?: string
+  completed?: boolean
 }
 
 export const appTasks = defineStore('app-tasks', () => {
@@ -31,7 +31,11 @@ export const appTasks = defineStore('app-tasks', () => {
     }
   }
 
-  const updateTaskStatus = (columnId: string, taskId: string, status: boolean) => {
+  const updateTaskStatus = (columnId: string, taskId: string | undefined, status: boolean) => {
+    if (!taskId) {
+      return
+    }
+
     const column = tasks.value.find(c => c.id === columnId)
     if (column) {
       const task = column.list.find(t => t.id === taskId)
@@ -41,7 +45,11 @@ export const appTasks = defineStore('app-tasks', () => {
     }
   }
 
-  const updateTask = (columnId: string, taskId: string, updatedTask: ITask) => {
+  const updateTask = (columnId: string, taskId: string | undefined, updatedTask: ITask) => {
+    if (!taskId) {
+      return
+    }
+
     const column = tasks.value.find(c => c.id === columnId)
     if (column) {
       const task = column.list.find(t => t.id === taskId)
@@ -55,7 +63,11 @@ export const appTasks = defineStore('app-tasks', () => {
     }
   }
 
-  const deleteTask = (columnId: string, taskId: string) => {
+  const deleteTask = (columnId: string, taskId: any) => {
+    if (!taskId) {
+      return
+    }
+    
     const column = tasks.value.find(c => c.id === columnId)
     if (column) {
       column.list = column.list.filter(t => t.id !== taskId)

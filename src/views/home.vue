@@ -1,18 +1,36 @@
 <script lang="ts" setup>
   import { ref, watch } from 'vue'
-  import { useLocalStorage } from '@vueuse/core'
+  import { appTasks, type ITask } from '@/stores/app.tasks'
 
   import Board from '@/components/ui/board.vue'
   import ModalAddTask from '@/components/ui/modal-add-task.vue'
+  import ModalTask from '../components/ui/modal-task.vue'
 
-  const tasks = useLocalStorage('tasks', [])
+  const newTaskValue = ref<ITask>({
+    id: '',
+    title: '',
+    startDate: null,
+    dueDate: null,
+    description: '',
+    completed: false,
+  })
 
-  const newTaskValue = ref({})
+  const addNewTask = (payload: ITask) => {
+    newTaskValue.value = payload
+  }
 
-  watch(newTaskValue, nValue => {
-    const table = tasks.value.find(t => t.id === 'pendentes')
-    if (table) {
-      table.tasks.push(nValue)
+  watch(newTaskValue, (nValue: ITask) => {
+    if (nValue.id !== '') {
+      appTasks().addTask('newTasks', nValue)
+
+      newTaskValue.value = {
+        id: '',
+        title: '',
+        startDate: null,
+        dueDate: null,
+        description: '',
+        completed: false,
+      }
     }
   })
 </script>
@@ -39,10 +57,16 @@
         >
           nangazaki </a
         >. The source code is available in
-        <a class="hover:text-zinc-500 transition underline" href="#">GitHub</a>
+        <a
+          class="hover:text-zinc-500 transition underline"
+          href="https://github.com/nangazaki/my-to-do"
+          target="_blank"
+          >GitHub</a
+        >
       </p>
     </footer>
 
-    <modal-add-task @submit="e => (newTaskValue = e)" />
+    <modal-add-task @submit="addNewTask" />
+    <modal-task />
   </div>
 </template>
